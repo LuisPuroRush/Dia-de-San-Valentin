@@ -13,8 +13,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #fae1dd;
-        animation: blink 3s linear infinite; /* Parpadeo */
+        background-color: #fae1dd; /* Color de fondo inicial */
     }
 
     @keyframes blink {
@@ -27,10 +26,6 @@
             background-color: #fae1dd;
             color: black;
         }
-    }
-
-    .container {
-        position: relative;
     }
 
     .valentines {
@@ -47,7 +42,6 @@
         height: 200px;
         background-color: #f08080;
     }
-
     .envelope:before {
         background-color: #f08080;
         content: "";
@@ -124,9 +118,9 @@
         top: 0;
     }
 
-    .front {
+    .front, .back {
         position: absolute;
-        border-right: 180px solid #f4978e;
+        border-right: 180px solid #f08080;
         border-top: 95px solid transparent;
         border-bottom: 100px solid transparent;
         left: 120px;
@@ -136,15 +130,16 @@
         z-index: 10;
     }
 
-    .front:before {
+    .front:before, .back:before {
         position: absolute;
         content: "";
-        border-left: 300px solid #f8ad9d;
+        border-left: 300px solid #f08080;
         border-top: 195px solid transparent;
         left: -120px;
         top: -95px;
         width: 0;
         height: 0;
+        
     }
 
     /* Add the shadow */
@@ -204,20 +199,94 @@
     .boton:hover {
         background-color: #d62828;
     }
+
+    .personalizar-btn {
+        position: absolute;
+        top: 500px; /* Ubicación debajo de la carta */
+        left: calc(50% - 90px); /* Centrado */
+        background-color: #f08080;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .personalizar-btn:hover {
+        background-color: #d62828;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    
 </style>
 <body>
     <div class="container">
         <div class="valentines">
             <div class="envelope"></div>
             <div class="front"></div>
+            <div class="back"></div>
             <div class="card" id="carta">
-                <div class="text">Feliz</br> San Valentin</br> Perras!</div>
+                <div class="text">Feliz</br> San Valentín</br> Perras!</div>
                 <div class="heart"></div>
             </div>
         </div>
     </div>
     <div class="shadow"></div>
     <button class="boton" id="boton">Empezemos!</button>
+    <button class="personalizar-btn" id="personalizar-btn">Personalizar</button>
+
+    <!-- Modal de personalización -->
+    <div id="myModal" class="modal">
+        <!-- Contenido del modal -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Personalizar carta</h2>
+            <form id="personalizar-form">
+                <label for="color">Color de fondo de la página:</label><br>
+                <input type="color" id="color" name="color"><br>
+                <label for="mensaje">Mensaje dentro de la carta:</label><br>
+                <input type="text" id="mensaje" name="mensaje"><br><br>
+                <input type="submit" value="Aceptar">
+            </form>
+        </div>
+    </div>
+
 <script>
     $(document).ready(function () {
         $(".container")
@@ -289,6 +358,38 @@
         $("#boton").click(function() {
             reproducirMusica();
         });
+
+        // Mostrar el modal de personalización cuando se haga clic en el botón
+        $("#personalizar-btn").click(function() {
+            $("#myModal").css("display", "block");
+        });
+
+        // Cerrar el modal cuando se haga clic en la X
+        $(".close").click(function() {
+            $("#myModal").css("display", "none");
+        });
+
+        // Cerrar el modal cuando se haga clic fuera del contenido
+        $(window).click(function(event) {
+            if (event.target == $("#myModal")[0]) {
+                $("#myModal").css("display", "none");
+            }
+        });
+
+        $("#personalizar-form").submit(function(event) {
+            event.preventDefault();
+            var color = $("#color").val();
+            var mensaje = $("#mensaje").val();
+
+            // Actualizar el color de fondo de la página web
+            $("body").css("background-color", color);
+
+            $(".text").text(mensaje);
+
+            // Cerrar el modal
+            $("#myModal").css("display", "none");
+        });
+
     });
 </script>
 </body>
