@@ -31,9 +31,10 @@
 
         .valentines {
             position: relative;
-            top: 50px;
+            top: 30px; /* Movimiento hacia arriba */
             cursor: pointer;
             animation: up 3s linear infinite;
+            opacity: 0.9; /* Transparencia */
         }
 
         /* Style the envelope and the card */
@@ -181,10 +182,10 @@
 
         /* Style the button */
         .boton {
-            display: none; /* Botón oculto inicialmente */
+            display: block; /* Botón visible */
             position: absolute;
-            top: calc(50% - 20px); /* Alineado verticalmente */
-            left: calc(50vw + 200px); /* Alineado más a la izquierda */
+            top: 310px; /* Ajuste para bajar el botón */
+            right: 50px; /* Alineado a la derecha */
             background-color: #f08080;
             color: white;
             padding: 10px 20px;
@@ -202,7 +203,7 @@
 
         .personalizar-btn {
             position: absolute;
-            top: 550px; /* Ajuste para bajar el botón */
+            top: 500px; /* Ajuste para bajar el botón */
             left: calc(50% - 90px); /* Centrado horizontal */
             background-color: transparent; /* Hacer el fondo transparente */
             color: #003049; /* Color de texto */
@@ -213,6 +214,7 @@
             font-size: 18px;
             font-weight: bold;
             box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.3);
+            opacity: 0.9; /* Transparencia */
         }
 
         .personalizar-btn:hover {
@@ -222,26 +224,29 @@
 
         .modal {
             display: none;
-            position: absolute;
+            position: absolute; /* Cambiado a posición absoluta */
             z-index: 1;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.9); /* Contenedor semitransparente */
-            padding: 30px;
-            border-radius: 20px;
+            left: 50%; /* Alineado horizontalmente */
+            top: 50%; /* Alineado verticalmente */
+            transform: translate(-50%, -50%); /* Centrar el modal */
             width: 60%;
             max-width: 400px; /* Limitar el ancho máximo */
-            text-align: center; /* Centrar el contenido */
+            overflow: auto;
+            background-color: rgba(255,255,255,0.9); /* Fondo semitransparente */
+            border-radius: 20px; /* Bordes redondeados */
+            padding: 30px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra */
-            opacity: 0.9; /* Opacidad */
+            opacity: 0.9; /* Transparencia */
+            pointer-events: auto; /* Permitir eventos de ratón */
+        }
+
+        .modal-content {
+            position: relative; /* Agregado para posicionar el dado */
         }
 
         .close {
             color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
@@ -256,9 +261,8 @@
         /* Estilo del dado */
         .dice {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: calc(50% + 40px); /* Alineado verticalmente */
+            right: 20px; /* Alineado a la derecha */
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -270,7 +274,7 @@
             color: white;
             cursor: pointer;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            opacity: 0.9; /* Opacidad */
+            visibility: hidden; /* Ocultar el dado inicialmente */
         }
 
         .dice:hover {
@@ -291,26 +295,27 @@
         </div>
     </div>
     <div class="shadow"></div>
-    <button class="boton" id="boton">Empezemos!</button>
+    <button class="boton" id="boton">3</button>
     <button class="personalizar-btn" id="personalizar-btn">Personalizar</button>
 
     <!-- Modal de personalización -->
     <div id="myModal" class="modal">
         <!-- Contenido del modal -->
-        <span class="close">&times;</span>
-        <h2 style="font-size: 24px; margin-bottom: 20px;">Personalizar carta</h2>
-        <form id="personalizar-form">
-            <label for="color" style="font-size: 20px; margin-right: 10px;">Color de fondo de la página:</label>
-            <input type="color" id="color" name="color" style="margin-right: 20px;">
-            <br><br>
-            <label for="mensaje" style="font-size: 20px;">Mensaje dentro de la carta:</label><br>
-            <textarea id="mensaje" name="mensaje" rows="4" cols="30" style="border-radius: 10px; padding: 10px; margin-top: 10px;"></textarea><br><br>
-            <input type="submit" value="Aceptar" style="background-color: #003049; color: white; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px;">
-        </form>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="font-size: 24px; margin-bottom: 20px;">Personalizar carta</h2>
+            <form id="personalizar-form">
+                <label for="color" style="font-size: 20px; margin-right: 10px;">Color de fondo de la página:</label>
+                <input type="color" id="color" name="color" style="margin-right: 20px;">
+                <br><br>
+                <label for="mensaje" style="font-size: 20px;">Mensaje dentro de la carta:</label><br>
+                <textarea id="mensaje" name="mensaje" rows="4" cols="30" style="border-radius: 10px; padding: 10px; margin-top: 10px;"></textarea><br><br>
+                <input type="submit" value="Aceptar" style="background-color: #003049; color: white; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px;">
+                <!-- Dado para generar mensajes aleatorios -->
+                <div class="dice" id="dice">&#9856;</div>
+            </form>
+        </div>
     </div>
-
-    <!-- Dado para generar mensajes aleatorios -->
-    <div class="dice" id="dice">&#9856;</div>
 
 <script>
     $(document).ready(function () {
@@ -332,61 +337,28 @@
                 );
             });
 
-        var countdown; // Variable para almacenar el temporizador
-        var musicaReproduciendose = false; // Variable para controlar la reproducción de la música
-        var botonMostrado = false; // Variable para controlar si el botón ya se mostró
-
-        // Función para iniciar la cuenta regresiva
-        function startCountdown() {
-            if (!botonMostrado) {
-                countdown = 3;
-                $(".boton").fadeIn();
-                $(".boton").text(countdown);
-                botonMostrado = true;
-                var timer = setInterval(function() {
-                    countdown--;
-                    if (countdown >= 0) {
-                        $(".boton").text(countdown);
-                    } else {
-                        clearInterval(timer);
-                        $(".boton").text("Empezemos!");
-                    }
-                }, 1000);
-            }
-        }
-
-        // Función para reproducir la música
-        function reproducirMusica() {
-            if (!musicaReproduciendose) {
-                var audio = new Audio('Gustarme.mp3');
-                audio.play();
-                musicaReproduciendose = true;
-            }
-        }
-
-        // Mostrar el botón después de 10 segundos
-        setTimeout(function() {
-            startCountdown();
-        }, 10000);
-
-        // Mostrar el botón cuando se haga clic en la carta
-        $("#carta").click(function() {
-            startCountdown();
-        });
-
-        // Mostrar el botón cuando el puntero esté encima de la carta
-        $(".valentines").hover(function() {
-            startCountdown();
-        });
-
-        // Reproducir la música cuando se haga clic en el botón
+        // Botón Empezemos!
         $("#boton").click(function() {
-            reproducirMusica();
+            var count = 3;
+            var interval = setInterval(function() {
+                if (count === 0) {
+                    clearInterval(interval);
+                    $("#boton").text("Empezemos!");
+                    $("#boton").click(function() {
+                        // Reproducir música
+                        var audio = new Audio('Gustarme.mp3');
+                        audio.play();
+                    });
+                } else {
+                    $("#boton").text(count);
+                    count--;
+                }
+            }, 1000);
         });
 
-        // Mostrar el modal de personalización cuando se haga clic en el botón
         $("#personalizar-btn").click(function() {
             $("#myModal").css("display", "block");
+            $(".dice").css("visibility", "visible"); /* Mostrar el dado al hacer clic en Personalizar */
         });
 
         // Cerrar el modal cuando se haga clic en la X
@@ -432,31 +404,52 @@
             $(".text").text(mensaje);
 
             $("#myModal").css("display", "none");
+            $(".dice").css("visibility", "hidden"); /* Ocultar el dado al cerrar el modal */
         });
 
-        // Hacer el contenedor de personalización movible
-        var modal = document.getElementById('myModal');
-        var isDragging = false;
-        var initialX;
-        var initialY;
+        // Drag modal function
+        dragElement(document.getElementById("myModal"));
 
-        modal.addEventListener('mousedown', function(event) {
-            isDragging = true;
-            initialX = event.clientX - parseInt(window.getComputedStyle(modal).left);
-            initialY = event.clientY - parseInt(window.getComputedStyle(modal).top);
-        });
-
-        modal.addEventListener('mouseup', function() {
-            isDragging = false;
-        });
-
-        modal.addEventListener('mousemove', function(event) {
-            event.preventDefault();
-            if (isDragging) {
-                modal.style.left = (event.clientX - initialX) * 100 / window.innerWidth + '%';
-                modal.style.top = (event.clientY - initialY) * 100 / window.innerHeight + '%';
+        function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                // if present, the header is where you move the DIV from:
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                // otherwise, move the DIV from anywhere inside the DIV:
+                elmnt.onmousedown = dragMouseDown;
             }
-        });
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                // stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
 
     });
 </script>
